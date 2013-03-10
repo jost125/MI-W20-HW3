@@ -1,8 +1,11 @@
 services:
     controller.owner_controller:
         class: CarRegistry\ApiBundle\Controller\OwnerController
-        arguments: [ @dao.owner_dao ]
+        arguments: [ @dao.owner_dao, @json_decoder ]
 
     dao.owner_dao:
         class: CarRegistry\ApiBundle\DAO\OwnerDAO
         arguments: [ @doctrine.orm.default_entity_manager ]
+
+    json_decoder:
+        class: CarRegistry\ApiBundle\JsonDecoder
