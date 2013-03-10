@@ -5,3 +5,4 @@ services:
 
     dao.owner_dao:
         class: CarRegistry\ApiBundle\DAO\OwnerDAO
+        arguments: [ @doctrine.orm.default_entity_manager ]

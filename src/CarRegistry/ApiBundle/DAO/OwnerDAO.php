@@ -2,19 +2,18 @@
 
 namespace CarRegistry\ApiBundle\DAO;
 
+use Doctrine\ORM\EntityManager;
+
 class OwnerDAO {
 
+	private $em;
+
+	public function __construct(EntityManager $em) {
+		$this->em = $em;
+	}
+
 	public function getAll() {
-		return array(
-			array(
-				'id' => 1,
-				'name' => 'John Doe',
-			),
-			array(
-				'id' => 2,
-				'name' => 'Arthur Dent',
-			)
-		);
+		return $this->em->createQuery('SELECT o FROM CarRegistryApiBundle:Owner o')->getArrayResult();
 	}
 
 }
