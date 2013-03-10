@@ -3,6 +3,7 @@
 namespace CarRegistry\ApiBundle\Controller;
 
 use CarRegistry\ApiBundle\DAO\OwnerDAO;
+use Doctrine\ORM\NoResultException;
 use Doctrine\DBAL\DBALException;
 use CarRegistry\ApiBundle\Entity\Owner;
 use CarRegistry\ApiBundle\JsonDecoder;
@@ -34,6 +35,18 @@ class OwnerController {
 	}
 
 	/**
+	 * @Route("/{id}")
+	 * @Method("GET")
+	 */
+	public function getOneAction($id) {
+		try {
+			return $this->response($this->ownerDAO->getOne($id));
+		} catch (NoResultException $ex) {
+			return $this->response(array('error' => 'No result found'));
+		}
+	}
+
+	/**
 	 * @Route("/")
 	 * @Method("POST")
 	 */
@@ -43,11 +56,51 @@ class OwnerController {
 
 		try {
 			$this->ownerDAO->save($owner);
-			$responseData = array('id' => $owner->getId());
+			$responseData = array(
+				'id' => $owner->getId(),
+				'message' => 'created',
+			);
 		} catch (DBALException $ex) {
 			$responseData = array('error' => preg_match('~Duplicate entry~', $ex->getMessage()) ? 'Duplicate entry' : 'Unknown error occurred');
-		} catch (Exception $ex) {
-			$responseData = array('error' => 'Unknown error occurred');
+		}
+
+		return $this->response($responseData);
+	}
+
+	/**
+	 * @Route("/{id}")
+	 * @Method("PUT")
+	 */
+	public function putAction(Request $request, $id) {
+		$owner = $this->ownerDAO->getOneEntity($id);
+		$this->jsonDecoder->decodeAndFill($request->getContent(), $owner);
+
+		try {
+			$this->ownerDAO->save($owner);
+			$responseData = array(
+				'id' => $owner->getId(),
+				'message' => 'updated',
+			);
+		} catch (DBALException $ex) {
+			$responseData = array('error' => preg_match('~Duplicate entry~', $ex->getMessage()) ? 'Duplicate entry' : 'Unknown error occurred');
+		}
+
+		return $this->response($responseData);
+	}
+
+	/**
+	 * @Route("/{id}")
+	 * @Method("DELETE")
+	 */
+	public function deleteAction($id) {
+		try {
+			$this->ownerDAO->delete($id);
+			$responseData = array(
+				'message' => 'deleted',
+				'id' => $id,
+			);
+		} catch (NoResultException $ex) {
+			$responseData = array('error' => 'No result found');
 		}
 
 		return $this->response($responseData);
