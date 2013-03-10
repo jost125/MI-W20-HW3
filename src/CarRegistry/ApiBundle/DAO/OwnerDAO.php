@@ -3,6 +3,7 @@
 namespace CarRegistry\ApiBundle\DAO;
 
 use Doctrine\ORM\EntityManager;
+use CarRegistry\ApiBundle\Entity\Owner;
 
 class OwnerDAO {
 
@@ -14,6 +15,11 @@ class OwnerDAO {
 
 	public function getAll() {
 		return $this->em->createQuery('SELECT o FROM CarRegistryApiBundle:Owner o')->getArrayResult();
+	}
+
+	public function save(Owner $owner) {
+		$this->em->persist($owner);
+		$this->em->flush();
 	}
 
 }
