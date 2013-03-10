@@ -2,8 +2,9 @@
 
 namespace CarRegistry\ApiBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use CarRegistry\ApiBundle\DAO\OwnerDAO;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -11,22 +12,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class OwnerController {
 
+	private $ownerDAO;
+
+	public function __construct(OwnerDAO $ownerDAO) {
+		$this->ownerDAO = $ownerDAO;
+	}
+
 	/**
 	 * @Route("/")
 	 * @Method("GET")
 	 */
 	public function indexAction() {
-		$owners = array(
-			array(
-				'id' => 1,
-				'name' => 'John Doe',
-			),
-			array(
-				'id' => 2,
-				'name' => 'Arthur Dent',
-			),
-		);
-		return new JsonResponse($owners);
+		return new JsonResponse($this->ownerDAO->getAll());
 	}
 
 }

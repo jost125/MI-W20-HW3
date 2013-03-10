@@ -1,3 +1,7 @@
 services:
     controller.owner_controller:
         class: CarRegistry\ApiBundle\Controller\OwnerController
+        arguments: [ @dao.owner_dao ]
+
+    dao.owner_dao:
+        class: CarRegistry\ApiBundle\DAO\OwnerDAO
