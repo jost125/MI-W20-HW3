@@ -52,19 +52,7 @@ class OwnerController {
 	 */
 	public function postAction(Request $request) {
 		$owner = new Owner();
-		$this->jsonDecoder->decodeAndFill($request->getContent(), $owner);
-
-		try {
-			$this->ownerDAO->save($owner);
-			$responseData = array(
-				'id' => $owner->getId(),
-				'message' => 'created',
-			);
-		} catch (DBALException $ex) {
-			$responseData = array('error' => preg_match('~Duplicate entry~', $ex->getMessage()) ? 'Duplicate entry' : 'Unknown error occurred');
-		}
-
-		return $this->response($responseData);
+		return $this->response($this->save($request, $owner));
 	}
 
 	/**
@@ -73,19 +61,7 @@ class OwnerController {
 	 */
 	public function putAction(Request $request, $id) {
 		$owner = $this->ownerDAO->getOneEntity($id);
-		$this->jsonDecoder->decodeAndFill($request->getContent(), $owner);
-
-		try {
-			$this->ownerDAO->save($owner);
-			$responseData = array(
-				'id' => $owner->getId(),
-				'message' => 'updated',
-			);
-		} catch (DBALException $ex) {
-			$responseData = array('error' => preg_match('~Duplicate entry~', $ex->getMessage()) ? 'Duplicate entry' : 'Unknown error occurred');
-		}
-
-		return $this->response($responseData);
+		return $this->response($this->save($request, $owner));
 	}
 
 	/**
@@ -104,6 +80,20 @@ class OwnerController {
 		}
 
 		return $this->response($responseData);
+	}
+
+	private function save(Request $request, Owner $owner) {
+		$this->jsonDecoder->decodeAndFill($request->getContent(), $owner);
+		try {
+			$this->ownerDAO->save($owner);
+			return array(
+				'id' => $owner->getId(),
+				'message' => 'updated',
+			);
+		}
+		catch (DBALException $ex) {
+			return array('error' => preg_match('~Duplicate entry~', $ex->getMessage()) ? 'Duplicate entry' : 'Unknown error occurred');;
+		}
 	}
 
 	private function response($responseData) {
