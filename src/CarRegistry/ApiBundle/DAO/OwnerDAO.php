@@ -33,6 +33,11 @@ class OwnerDAO {
 		return $results[0];
 	}
 
+	/**
+	 * @param $id
+	 * @return Owner
+	 * @throws \Doctrine\ORM\NoResultException
+	 */
 	public function getOneEntity($id) {
 		$owner = $this->em->find('CarRegistryApiBundle:Owner', $id);
 		if (!$owner) {

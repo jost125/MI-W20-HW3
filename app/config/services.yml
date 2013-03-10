@@ -3,8 +3,32 @@ services:
         class: CarRegistry\ApiBundle\Controller\OwnerController
         arguments: [ @dao.owner_dao, @json_decoder ]
 
+    controller.place_controller:
+        class: CarRegistry\ApiBundle\Controller\PlaceController
+        arguments: [ @dao.place_dao, @dao.owner_dao, @json_decoder ]
+
+    controller.plate_controller:
+        class: CarRegistry\ApiBundle\Controller\PlateController
+        arguments: [ @dao.plate_dao, @dao.car_dao, @dao.owner_dao, @json_decoder ]
+
+    controller.car_controller:
+        class: CarRegistry\ApiBundle\Controller\CarController
+        arguments: [ @dao.car_dao, @dao.owner_dao, @json_decoder ]
+
     dao.owner_dao:
         class: CarRegistry\ApiBundle\DAO\OwnerDAO
+        arguments: [ @doctrine.orm.default_entity_manager ]
+
+    dao.place_dao:
+        class: CarRegistry\ApiBundle\DAO\PlaceDAO
+        arguments: [ @doctrine.orm.default_entity_manager ]
+
+    dao.plate_dao:
+        class: CarRegistry\ApiBundle\DAO\PlateDAO
+        arguments: [ @doctrine.orm.default_entity_manager ]
+
+    dao.car_dao:
+        class: CarRegistry\ApiBundle\DAO\CarDAO
         arguments: [ @doctrine.orm.default_entity_manager ]
 
     json_decoder:

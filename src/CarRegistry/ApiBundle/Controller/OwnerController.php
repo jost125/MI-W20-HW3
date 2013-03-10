@@ -3,11 +3,9 @@
 namespace CarRegistry\ApiBundle\Controller;
 
 use CarRegistry\ApiBundle\DAO\OwnerDAO;
-use Doctrine\ORM\NoResultException;
 use Doctrine\DBAL\DBALException;
 use CarRegistry\ApiBundle\Entity\Owner;
 use CarRegistry\ApiBundle\JsonDecoder;
-use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
