@@ -1,0 +1,3 @@
+services:
+    controller.demo_controller:
+        class: CarRegistry\ApiBundle\Controller\DemoController
