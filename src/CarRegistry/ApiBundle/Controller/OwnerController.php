@@ -39,11 +39,7 @@ class OwnerController {
 	 * @Method("GET")
 	 */
 	public function getOneAction($id) {
-		try {
-			return $this->response($this->ownerDAO->getOne($id));
-		} catch (NoResultException $ex) {
-			return $this->response(array('error' => 'No result found'));
-		}
+		return $this->response($this->ownerDAO->getOne($id));
 	}
 
 	/**
@@ -69,31 +65,22 @@ class OwnerController {
 	 * @Method("DELETE")
 	 */
 	public function deleteAction($id) {
-		try {
-			$this->ownerDAO->delete($id);
-			$responseData = array(
-				'message' => 'deleted',
-				'id' => $id,
-			);
-		} catch (NoResultException $ex) {
-			$responseData = array('error' => 'No result found');
-		}
+		$this->ownerDAO->delete($id);
+		$responseData = array(
+			'message' => 'deleted',
+			'id' => $id,
+		);
 
 		return $this->response($responseData);
 	}
 
 	private function save(Request $request, Owner $owner) {
 		$this->jsonDecoder->decodeAndFill($request->getContent(), $owner);
-		try {
-			$this->ownerDAO->save($owner);
-			return array(
-				'id' => $owner->getId(),
-				'message' => 'updated',
-			);
-		}
-		catch (DBALException $ex) {
-			return array('error' => preg_match('~Duplicate entry~', $ex->getMessage()) ? 'Duplicate entry' : 'Unknown error occurred');;
-		}
+		$this->ownerDAO->save($owner);
+		return array(
+			'id' => $owner->getId(),
+			'message' => 'updated',
+		);
 	}
 
 	private function response($responseData) {

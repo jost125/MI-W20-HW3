@@ -9,3 +9,12 @@ services:
 
     json_decoder:
         class: CarRegistry\ApiBundle\JsonDecoder
+
+    exception_handler_interceptor:
+        class: CarRegistry\ApiBundle\ExceptionHandler\ExceptionHandlerInterceptor
+        arguments: [@annotation_reader, @service_container]
+
+    exception_handler_pointcut:
+        class: CarRegistry\ApiBundle\ExceptionHandler\AllControllerPointcut
+        tags:
+            - { name: jms_aop.pointcut, interceptor: exception_handler_interceptor }
