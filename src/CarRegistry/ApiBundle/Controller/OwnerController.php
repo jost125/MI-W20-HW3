@@ -22,7 +22,7 @@ class OwnerController {
 	 * @Route("/")
 	 * @Method("GET")
 	 */
-	public function indexAction() {
+	public function getAction() {
 		return new JsonResponse($this->ownerDAO->getAll());
 	}
 
